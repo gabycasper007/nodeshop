@@ -3,7 +3,7 @@ const router = express.Router();
 
 router
   .get("/add-product", (req, res) => {
-    res.sendFile(res.view("add-product.html"));
+    res.render("add-product");
   })
   .post("/add-product", (req, res) => {
     console.log(req.body.title);
