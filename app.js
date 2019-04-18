@@ -5,6 +5,7 @@ const adminRoutes = require("./routes/admin");
 const shopRoutes = require("./routes/shop");
 const path = require("path");
 
+app.use(express.static("public"));
 app.use((req, res, next) => {
   res.view = fileName => path.resolve("views", fileName);
   next();
