@@ -1,9 +1,9 @@
-const products = [];
+const Product = require("../models/product");
 
 exports.getHomepage = (req, res) => {
   res.render("shop", {
-    products: products,
-    pageTitle: "CTRL PUG Shop",
+    products: Product.fetchAll(),
+    pageTitle: "PUG Shop",
     path: "/"
   });
 };
@@ -16,14 +16,7 @@ exports.getAddProduct = (req, res) => {
 };
 
 exports.postAddProduct = (req, res) => {
-  products.push({
-    id: Math.random(),
-    title: req.body.title,
-    image:
-      "https://cdn.pixabay.com/photo/2016/03/31/20/51/book-1296045_960_720.png",
-    price: 19.99,
-    description:
-      "A very interesting book about so many even more interesting things!"
-  });
+  const product = new Product(req.body.title);
+  product.save();
   res.redirect("/");
 };
