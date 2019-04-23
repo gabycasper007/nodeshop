@@ -4,7 +4,10 @@ const products = [];
 
 router
   .get("/add-product", (req, res) => {
-    res.render("add-product");
+    res.render("add-product", {
+      path: "/admin/add-product",
+      pageTitle: "Add product"
+    });
   })
   .post("/add-product", (req, res) => {
     products.push({

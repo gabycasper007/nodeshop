@@ -5,7 +5,8 @@ const admin = require("./admin");
 router.get("/", (req, res) => {
   res.render("shop", {
     products: admin.products,
-    docTitle: "PUG Shop"
+    pageTitle: "PUG Shop",
+    path: "/"
   });
 });
 
