@@ -2,6 +2,6 @@ const express = require("express");
 const router = express.Router();
 const productCtrls = require("../controllers/products");
 
-router.get("/", productCtrls.getHomepage);
-
-module.exports = router;
+module.exports = router
+  .get("/", productCtrls.getHomepage)
+  .get("/products/:id", productCtrls.getProduct);

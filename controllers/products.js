@@ -6,27 +6,23 @@ exports.getHomepage = async (req, res) => {
     res.render("shop", {
       products,
       pageTitle: "Shop",
-      path: "/"
+      path: "/",
+      list: true
     });
   } catch (err) {
     console.error(err);
   }
 };
 
-exports.getAddProduct = (req, res) => {
-  res.render("add-product", {
-    path: "/admin/add-product",
-    pageTitle: "Add product"
-  });
-};
-
-exports.postAddProduct = (req, res) => {
-  const product = new Product({
-    title: req.body.title,
-    image: req.body.image,
-    price: req.body.price,
-    description: req.body.description
-  });
-  product.save();
-  res.redirect("/");
+exports.getProduct = async (req, res) => {
+  try {
+    const product = await Product.findById(req.params.id);
+    res.render("products/product-detail", {
+      product,
+      pageTitle: product.title,
+      path: "/products/" + product._id
+    });
+  } catch (error) {
+    console.error(error);
+  }
 };
