@@ -1,11 +1,16 @@
 const Product = require("../models/product");
 
-exports.getHomepage = (req, res) => {
-  res.render("shop", {
-    products: Product.fetchAll(),
-    pageTitle: "PUG Shop",
-    path: "/"
-  });
+exports.getHomepage = async (req, res) => {
+  try {
+    const products = await Product.find();
+    res.render("shop", {
+      products,
+      pageTitle: "Shop",
+      path: "/"
+    });
+  } catch (err) {
+    console.error(err);
+  }
 };
 
 exports.getAddProduct = (req, res) => {
@@ -16,7 +21,12 @@ exports.getAddProduct = (req, res) => {
 };
 
 exports.postAddProduct = (req, res) => {
-  const product = new Product(req.body.title);
+  const product = new Product({
+    title: req.body.title,
+    image: req.body.image,
+    price: req.body.price,
+    description: req.body.description
+  });
   product.save();
   res.redirect("/");
 };

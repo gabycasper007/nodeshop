@@ -3,6 +3,7 @@ const bodyParser = require("body-parser");
 const admin = require("./routes/admin");
 const shopRoutes = require("./routes/shop");
 const errorController = require("./controllers/error");
+const mongoose = require("mongoose");
 
 const app = express();
 
@@ -16,4 +17,12 @@ app.use("/admin", admin.router);
 app.use(shopRoutes);
 app.use("/", errorController.get404);
 
-app.listen(3000);
+mongoose
+  .connect(
+    "mongodb+srv://gabriellvasile:KYjM5jBPTeCPcJlA@mongotut-sxsgb.mongodb.net/test?retryWrites=true",
+    { useNewUrlParser: true }
+  )
+  .then(() => {
+    app.listen(3000);
+  })
+  .catch(console.error);
