@@ -2,3 +2,4 @@ challenges/
 assignments/
 node_modules/
 routes.js
+.env

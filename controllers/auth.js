@@ -1,6 +1,4 @@
 exports.getLogin = (req, res) => {
-  console.log(req.isAuth);
-
   res.render("auth/login", {
     path: "/login",
     pageTitle: "Login"
@@ -8,5 +6,6 @@ exports.getLogin = (req, res) => {
 };
 
 exports.postLogin = (req, res) => {
+  req.session.auth = true;
   res.redirect("/");
 };

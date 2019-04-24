@@ -6,9 +6,22 @@ const authRoutes = require("./routes/auth");
 const errorController = require("./controllers/error");
 const mongoose = require("mongoose");
 const User = require("./models/user");
+const session = require("express-session");
+const MongoDBStore = require("connect-mongodb-session")(session);
+
+const MongoDBUri =
+  "mongodb+srv://gabriellvasile:KYjM5jBPTeCPcJlA@mongotut-sxsgb.mongodb.net/test";
+
+if (process.env.NODE_ENV !== "production") {
+  require("dotenv").config();
+}
 
 // Init app
 const app = express();
+const store = new MongoDBStore({
+  uri: MongoDBUri,
+  collection: "sessions"
+});
 
 // Middlewares
 app.set("view engine", "pug");
@@ -22,6 +35,14 @@ app.use(async (req, res, next) => {
     console.error(err);
   }
 });
+app.use(
+  session({
+    secret: process.env.SESSION_SECRET,
+    resave: false,
+    saveUninitialized: false,
+    store
+  })
+);
 
 // Routing
 app.use("/admin", adminRoutes);
@@ -31,10 +52,7 @@ app.use("/", errorController.get404);
 
 // DB and Server
 mongoose
-  .connect(
-    "mongodb+srv://gabriellvasile:KYjM5jBPTeCPcJlA@mongotut-sxsgb.mongodb.net/test?retryWrites=true",
-    { useNewUrlParser: true }
-  )
+  .connect(MongoDBUri, { useNewUrlParser: true })
   .then(async () => {
     try {
       const user = await User.findOne();
