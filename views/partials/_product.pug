@@ -8,10 +8,12 @@ article.card.product-item
     p.product__description #{product.description}
   .card__actions
     if list
-      a.btn(href="/products/"+product._id) Details
+      a.btn(href="/products/"+product.id) Details
     if isAdmin
       a.btn(href="/admin/product/edit/"+product.id) Edit
       form(action="/admin/product/delete/" + product.id method="POST")
         input.btn(type="submit" value="Delete")
     else  
-      button.btn Add to Cart
+      form(action="/cart" method="post")
+          button.btn(type="submit") Add to Cart
+          input(type="hidden" name="productId" value=product.id)

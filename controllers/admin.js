@@ -1,7 +1,7 @@
 const Product = require("../models/product");
 
 exports.getAddProduct = (req, res) => {
-  res.render("products/add-product", {
+  res.render("shop/add-product", {
     path: "/admin/add-product",
     pageTitle: "Add product"
   });
@@ -12,7 +12,8 @@ exports.postAddProduct = async (req, res) => {
     title: req.body.title,
     image: req.body.image,
     description: req.body.description,
-    price: req.body.price
+    price: req.body.price,
+    userId: req.user
   });
   try {
     await product.save();
@@ -39,7 +40,7 @@ exports.viewProducts = async (req, res) => {
 exports.editProduct = async (req, res) => {
   try {
     const product = await Product.findById(req.params.id);
-    res.render("products/add-product", {
+    res.render("shop/add-product", {
       product,
       path: "/admin/product/patch/" + product.id,
       method: "PATCH"
