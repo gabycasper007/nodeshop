@@ -1,0 +1,17 @@
+extends ../layouts/main-layout
+block styles
+  link(rel="stylesheet", href="/css/orders.css")
+
+block content
+  if orders.length > 0
+    ul.orders
+      each order in orders
+        li.orders__item
+            h1 Order# #{order.id}
+            ul.orders__products
+              each p in order.products
+                li.orders__products-item #{p.product.title}&nbsp;
+                  strong #{p.quantity} x #{p.product.price}
+            h4 Total: #{order.total}      
+  else
+    h1 No Orders

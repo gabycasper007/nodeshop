@@ -53,4 +53,16 @@ userSchema.methods.removeFromCart = function(id) {
   this.save();
 };
 
+userSchema.methods.getCart = async function() {
+  const user = await this.populate("cart.items.productId").execPopulate();
+  return user.cart.items.map(item => {
+    return { product: { ...item.productId._doc }, quantity: item.quantity };
+  });
+};
+
+userSchema.methods.clearCart = function() {
+  this.cart.items = [];
+  this.save();
+};
+
 module.exports = mongoose.model("User", userSchema);

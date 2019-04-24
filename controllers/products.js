@@ -1,4 +1,5 @@
 const Product = require("../models/product");
+const Order = require("../models/order");
 
 exports.getHomepage = async (req, res) => {
   try {
@@ -28,12 +29,22 @@ exports.getProduct = async (req, res) => {
 };
 
 exports.getCart = async (req, res) => {
-  const user = await req.user.populate("cart.items.productId").execPopulate();
-  res.render("shop/cart", {
-    path: "cart",
-    products: user.cart.items,
-    pageTitle: "Your Cart"
-  });
+  try {
+    const products = await req.user.getCart();
+
+    res.render("shop/cart", {
+      path: "/cart",
+      products: products.map(product => {
+        return {
+          ...product.product,
+          quantity: product.quantity
+        };
+      }),
+      pageTitle: "Your Cart"
+    });
+  } catch (error) {
+    console.error(error);
+  }
 };
 
 exports.postCart = async (req, res) => {
@@ -53,4 +64,46 @@ exports.cartDeleteItem = async (req, res) => {
   } catch (error) {
     console.error(error);
   }
+};
+
+exports.postOrder = async (req, res) => {
+  try {
+    const products = await req.user.getCart();
+    const order = new Order({
+      user: req.user.id,
+      products
+    });
+    await order.save();
+    await req.user.clearCart();
+    res.redirect("/");
+  } catch (error) {
+    console.error(error);
+  }
+};
+
+exports.getOrders = async (req, res) => {
+  try {
+    const orders = await Order.find({ user: req.user.id });
+    res.render("shop/orders", {
+      orders: addTotalToOrders(orders),
+      path: "/orders",
+      pageTitle: "Your orders"
+    });
+  } catch (error) {
+    console.error(error);
+  }
+};
+
+const addTotalToOrders = orders => {
+  const newOrders = orders.map(order => {
+    return {
+      id: order.id,
+      products: order.products,
+      total: order.products.reduce(
+        (acc, cur) => +(acc + cur.product.price * cur.quantity).toFixed(2),
+        0
+      )
+    };
+  });
+  return newOrders;
 };

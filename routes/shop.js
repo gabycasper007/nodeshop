@@ -7,4 +7,6 @@ module.exports = router
   .get("/products/:id", productCtrls.getProduct)
   .get("/cart", productCtrls.getCart)
   .post("/cart", productCtrls.postCart)
-  .post("/cart-delete-item", productCtrls.cartDeleteItem);
+  .post("/cart-delete-item", productCtrls.cartDeleteItem)
+  .post("/create-order", productCtrls.postOrder)
+  .get("/orders", productCtrls.getOrders);
