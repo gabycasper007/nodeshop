@@ -1,0 +1,14 @@
+extends ../layouts/main-layout
+block styles
+  link(rel="stylesheet", href="/css/forms.css")
+  link(rel="stylesheet", href="/css/auth.css")
+  
+block content
+  form.login-form(action=path method="POST")
+    .form-control
+      label(for="e-mail") E-mail
+      input(type="text" name="e-mail")
+    .form-control
+      label(for="password") Password  
+      input(type="password" name="password")
+    button.btn(type="submit") Login
